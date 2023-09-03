@@ -61,6 +61,7 @@ class StreamerEventsDevSeeder extends Seeder
 
                 $donations[] = [
                     'user_id' => $userId,
+                    'donator_id' => $followerId,
                     'is_read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                     'message' => $donationMessages[random_int(0, $donationMessagesMax)],
