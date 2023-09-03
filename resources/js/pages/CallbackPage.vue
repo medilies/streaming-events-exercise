@@ -17,12 +17,15 @@ useOauthProviderCode(code);
 
 async function useOauthProviderCode(code) {
     try {
-        const response = await fetch(`/api/auth/github/callback?code=${code}`, {
-            method: "GET",
-            headers: {
-                Accept: "application/json",
-            },
-        });
+        const response = await fetch(
+            `/api/v0.1/auth/github/callback?code=${code}`,
+            {
+                method: "GET",
+                headers: {
+                    Accept: "application/json",
+                },
+            }
+        );
 
         if (!response.ok) {
             throw new Error("Network response was not ok");
