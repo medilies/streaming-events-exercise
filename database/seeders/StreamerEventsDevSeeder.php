@@ -32,6 +32,7 @@ class StreamerEventsDevSeeder extends Seeder
             fake()->realText(),
             fake()->realText(),
         ];
+        $donationMessagesCount = count($donationMessages) - 1;
 
         foreach ($this->famousUserIds as $userId) {
             foreach ($this->userIds as $followerId) {
@@ -50,16 +51,18 @@ class StreamerEventsDevSeeder extends Seeder
                     'user_id' => $userId,
                     'read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
-                    'message' => $donationMessages[random_int(0, count($donationMessages) - 1)],
+                    'message' => $donationMessages[random_int(0, $donationMessagesCount)],
                     'amount' => random_int(1, 666),
                     'currency' => 'USD',
                 ];
             }
         }
 
-        Follower::insert($followers);
+        foreach (array_chunk($followers, 1000) as $followersChunk) {
+            Follower::insert($followersChunk);
+        }
 
-        foreach (array_chunk($donations, 500) as $donationsChunk) {
+        foreach (array_chunk($donations, 100) as $donationsChunk) {
             Donation::insert($donationsChunk);
         }
     }

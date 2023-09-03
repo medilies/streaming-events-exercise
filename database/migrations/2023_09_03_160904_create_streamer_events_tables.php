@@ -14,7 +14,6 @@ return new class extends Migration
             $table->softDeletes();
 
             $table->foreign('follower_id')->references('id')->on('users');
-            $table->unique(['user_id', 'follower_id']);
         });
 
         //
