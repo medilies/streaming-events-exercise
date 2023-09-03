@@ -9,7 +9,6 @@ Route::get('/auth/{idp}/callback', [OauthController::class, 'callback'])
     ->name('auth.callback');
 
 // TODO: protect with sanctum
-Route::put('/streaming-events/{streaming_event_type}/{id}/read', [ReadStateController::class, 'read']);
-Route::put('/streaming-events/{streaming_event_type}/{id}/unread', [ReadStateController::class, 'unread']);
+Route::put('/streaming-events/{streaming_event_type}/{id}/{action}', ReadStateController::class);
 
 Route::get('/streaming-events', EventsAggregateController::class);

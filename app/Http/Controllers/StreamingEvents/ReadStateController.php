@@ -8,18 +8,10 @@ use Illuminate\Support\Facades\Gate;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class ReadStateController {
-    public function read(string $streamingEventType, int $id) {
-        return $this->update($streamingEventType, $id, true);
-    }
-
-    public function unread(string $streamingEventType, int $id) {
-        return $this->update($streamingEventType, $id, false);
-    }
-
-    private function update(string $streamingEventType, int $id, bool $value)
-    {
+    public function __invoke(string $streamingEventType, int $id, string $state) {
         $event = match($streamingEventType) {
             'follower' => Follower::findOrFail($id),
+            // TODO: handle other events
             default => throw new NotFoundHttpException("Event {$streamingEventType} not found"),
         };
 
@@ -28,7 +20,7 @@ class ReadStateController {
         //     return true;
         // });
 
-        $event->update(['is_read' => $value]);
+        $event->update(['is_read' => $state === 'read']);
 
         return response(status: 204);
     }
