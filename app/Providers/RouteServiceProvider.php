@@ -7,6 +7,7 @@ use Illuminate\Foundation\Support\Providers\RouteServiceProvider as ServiceProvi
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class RouteServiceProvider extends ServiceProvider
 {
@@ -35,6 +36,18 @@ class RouteServiceProvider extends ServiceProvider
 
             Route::middleware('web')
                 ->group(base_path('routes/web.php'));
+        });
+
+        Route::bind('idp', function (string $idp) {
+            if (
+                array_key_exists($idp, config('services')) &&
+                array_key_exists('is_oauth_provider', config('services.github')) &&
+                config('services.github.is_oauth_provider')
+            ) {
+                return $idp;
+            }
+
+            throw new NotFoundHttpException("OAuth {$idp} not found");
         });
     }
 }
