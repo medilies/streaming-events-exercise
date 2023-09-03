@@ -51,6 +51,8 @@ php artisan optimize:clear
 php artisan migrate:fresh --seed
 ```
 
+Set GitHub Oauth provider and `GITHUB_CLIENT_ID`, `GITHUB_CLIENT_SECRET`
+
 ## APIs docs
 
 Run:
