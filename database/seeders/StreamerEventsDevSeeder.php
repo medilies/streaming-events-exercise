@@ -4,6 +4,8 @@ namespace Database\Seeders;
 
 use App\Models\Donation;
 use App\Models\Follower;
+use App\Models\Subscriber;
+use App\Models\SubscriptionTier;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Database\Seeder;
@@ -24,6 +26,7 @@ class StreamerEventsDevSeeder extends Seeder
 
         $followers = [];
         $donations = [];
+        $subscribers = [];
 
         $donationMessages = [
             fake()->realText(),
@@ -32,7 +35,10 @@ class StreamerEventsDevSeeder extends Seeder
             fake()->realText(),
             fake()->realText(),
         ];
-        $donationMessagesCount = count($donationMessages) - 1;
+        $donationMessagesMax = count($donationMessages) - 1;
+
+        $subscriptionTierIds = SubscriptionTier::pluck('id');
+        $subscriptionTierCount = count($subscriptionTierIds);
 
         foreach ($this->famousUserIds as $userId) {
             foreach ($this->userIds as $followerId) {
@@ -51,9 +57,17 @@ class StreamerEventsDevSeeder extends Seeder
                     'user_id' => $userId,
                     'read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
-                    'message' => $donationMessages[random_int(0, $donationMessagesCount)],
+                    'message' => $donationMessages[random_int(0, $donationMessagesMax)],
                     'amount' => random_int(1, 666),
                     'currency' => 'USD',
+                ];
+
+                $subscribers[] = [
+                    'user_id' => $userId,
+                    'read' => false,
+                    'created_at' => Carbon::today()->subDays(random_int(0, 90)),
+                    'subscriber_id' => $followerId,
+                    'subscription_tier_id' => $subscriptionTierIds[random_int(0, $subscriptionTierCount - 1)],
                 ];
             }
         }
@@ -62,8 +76,12 @@ class StreamerEventsDevSeeder extends Seeder
             Follower::insert($followersChunk);
         }
 
-        foreach (array_chunk($donations, 100) as $donationsChunk) {
+        foreach (array_chunk($donations, 1000) as $donationsChunk) {
             Donation::insert($donationsChunk);
+        }
+
+        foreach (array_chunk($subscribers, 1000) as $subscriberChunk) {
+            Subscriber::insert($subscriberChunk);
         }
     }
 }
