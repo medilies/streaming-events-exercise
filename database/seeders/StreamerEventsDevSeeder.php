@@ -2,6 +2,7 @@
 
 namespace Database\Seeders;
 
+use App\Models\Donation;
 use App\Models\Follower;
 use App\Models\User;
 use Carbon\Carbon;
@@ -22,6 +23,7 @@ class StreamerEventsDevSeeder extends Seeder
         );
 
         $followers = [];
+        $donations = [];
 
         foreach ($this->famousUserIds as $userId) {
             foreach ($this->userIds as $followerId) {
@@ -35,9 +37,22 @@ class StreamerEventsDevSeeder extends Seeder
                     'read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                 ];
+
+                $donations[] = [
+                    'user_id' => $userId,
+                    'read' => false,
+                    'created_at' => Carbon::today()->subDays(random_int(0, 90)),
+                    'message' => fake()->realText(),
+                    'amount' => random_int(1, 666),
+                    'currency' => 'USD',
+                ];
             }
         }
 
         Follower::insert($followers);
+
+        foreach(array_chunk($donations, 500) as $donationsChunk) {
+            Donation::insert($donationsChunk);
+        }
     }
 }
