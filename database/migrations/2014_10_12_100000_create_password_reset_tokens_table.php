@@ -17,6 +17,6 @@ return new class extends Migration
 
     public function down(): void
     {
-        throw new Exception("Rollback is disabled");
+        throw new Exception('Rollback is disabled');
     }
 };
