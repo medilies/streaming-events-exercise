@@ -61,7 +61,7 @@ return new class extends Migration
         $table->id();
         $table->foreignId('user_id')->constrained();
         $table->timestamp('created_at');
-        $table->boolean('read');
+        $table->boolean('is_read');
     }
 
     private function currencyColumn(Blueprint $table): void

@@ -28,7 +28,7 @@ class ReadStateController {
         //     return true;
         // });
 
-        $event->update(['read' => $value]);
+        $event->update(['is_read' => $value]);
 
         return response(status: 204);
     }

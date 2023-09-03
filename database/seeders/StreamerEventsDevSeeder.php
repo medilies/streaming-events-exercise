@@ -55,13 +55,13 @@ class StreamerEventsDevSeeder extends Seeder
                 $followers[] = [
                     'user_id' => $userId,
                     'follower_id' => $followerId,
-                    'read' => false,
+                    'is_read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                 ];
 
                 $donations[] = [
                     'user_id' => $userId,
-                    'read' => false,
+                    'is_read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                     'message' => $donationMessages[random_int(0, $donationMessagesMax)],
                     'amount' => random_int(1, 666),
@@ -70,7 +70,7 @@ class StreamerEventsDevSeeder extends Seeder
 
                 $subscribers[] = [
                     'user_id' => $userId,
-                    'read' => false,
+                    'is_read' => false,
                     'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                     'subscriber_id' => $followerId,
                     'subscription_tier_id' => $subscriptionTierIds[random_int(0, $subscriptionTierCount - 1)],
@@ -79,7 +79,7 @@ class StreamerEventsDevSeeder extends Seeder
                 if($merchCount > 0) {
                     $sales[] = [
                         'user_id' => $userId,
-                        'read' => false,
+                        'is_read' => false,
                         'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                         'merchandise_id' => $merchIds[random_int(0, $merchCount - 1)],
                         'amount' => random_int(1,30),
