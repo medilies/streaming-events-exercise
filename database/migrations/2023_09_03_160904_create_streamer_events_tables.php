@@ -9,10 +9,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::create('followers', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->timestamp('created_at');
-            $table->boolean('read');
+            $this->sharedEventColumns($table);
             $table->unsignedBigInteger('follower_id');
             $table->softDeletes();
 
@@ -25,13 +22,10 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('amount');
-            $table->string('currency', 3);
+            $this->currencyColumn($table);
         });
         Schema::create('subscribers', function (Blueprint $table) {
-            $table->id();
-            $table->timestamp('created_at');
-            $table->foreignId('user_id');
-            $table->boolean('read');
+            $this->sharedEventColumns($table);
             $table->unsignedBigInteger('subscriber_id');
             $table->unsignedBigInteger('subscription_tier_id');
 
@@ -41,12 +35,9 @@ return new class extends Migration
 
         //
         Schema::create('donations', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->timestamp('created_at');
-            $table->boolean('read');
+            $this->sharedEventColumns($table);
             $table->string('message');
-            $table->string('currency', 3);
+            $this->currencyColumn($table);
         });
 
         //
@@ -55,17 +46,27 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->unsignedBigInteger('price');
-            $table->string('currency', 3);
+            $this->currencyColumn($table);
         });
 
         Schema::create('merchandise_sales', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('user_id')->constrained();
-            $table->timestamp('created_at');
-            $table->boolean('read');
+            $this->sharedEventColumns($table);
             $table->foreignId('merchandise_id')->constrained();
             $table->unsignedSmallInteger('amount'); // TODO: validate count
         });
+    }
+
+    private function sharedEventColumns(Blueprint $table): void
+    {
+        $table->id();
+        $table->foreignId('user_id')->constrained();
+        $table->timestamp('created_at');
+        $table->boolean('read');
+    }
+
+    private function currencyColumn(Blueprint $table): void
+    {
+        $table->string('currency', 3);
     }
 
     public function down(): void
