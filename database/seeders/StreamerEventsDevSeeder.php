@@ -80,6 +80,7 @@ class StreamerEventsDevSeeder extends Seeder
                 if($merchCount > 0) {
                     $sales[] = [
                         'user_id' => $userId,
+                        'buyer_id' => $followerId,
                         'is_read' => false,
                         'created_at' => Carbon::today()->subDays(random_int(0, 90)),
                         'merchandise_id' => $merchIds[random_int(0, $merchCount - 1)],

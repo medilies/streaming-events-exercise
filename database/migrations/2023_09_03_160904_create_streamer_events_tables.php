@@ -55,7 +55,10 @@ return new class extends Migration
         Schema::create('merchandise_sales', function (Blueprint $table) {
             $this->sharedEventColumns($table);
             $table->foreignId('merchandise_id')->constrained();
+            $table->unsignedBigInteger('buyer_id');
             $table->unsignedSmallInteger('amount'); // TODO: validate count
+
+            $table->foreign('buyer_id')->references('id')->on('users');
         });
     }
 
