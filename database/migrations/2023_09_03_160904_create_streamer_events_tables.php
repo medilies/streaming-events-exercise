@@ -37,6 +37,7 @@ return new class extends Migration
         Schema::create('donations', function (Blueprint $table) {
             $this->sharedEventColumns($table);
             $table->string('message');
+            $table->unsignedBigInteger('amount');
             $this->currencyColumn($table);
         });
 
